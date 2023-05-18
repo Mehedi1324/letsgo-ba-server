@@ -33,6 +33,17 @@ app.use('/api/users', usersRoute);
 app.use('/api/hotels', hotelsRoute);
 app.use('/api/rooms', roomsRoute);
 
+app.use((err, req, res, next) => {
+  const errrorStatus = err.status || 500;
+  const errorMessage = err.message || 'Something went wrong';
+  return res.status(errrorStatus).json({
+    success: false,
+    status: errrorStatus,
+    message: errorMessage,
+    stack: err.stack,
+  });
+});
+
 // ___________________________________
 app.listen(port, (req, res) => {
   startServer();
