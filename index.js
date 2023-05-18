@@ -11,6 +11,10 @@ const app = express();
 const port = process.env.PORT || 1010;
 dotenv.config();
 
+app.get('/', (req, res) => {
+  res.send("Welcome to Let's go booking app backend server");
+});
+
 // Connecting mongodb through mongoose_____________________
 
 const connect = async () => {
