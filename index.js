@@ -5,7 +5,6 @@ import authRoute from './routes/auth.js';
 import hotelsRoute from './routes/hotels.js';
 import roomsRoute from './routes/rooms.js';
 import usersRoute from './routes/users.js';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import connectDB from './mongodb/connnection.js';
 const app = express();
@@ -26,31 +25,13 @@ const startServer = async () => {
   }
 };
 
-// Show Mongodb connection and disconnection message___________
-
-mongoose.connection.on('disconnected', () => {
-  console.log('mongoDB Disconnected');
-});
-
 // Middlewares____________________
 app.use(cors());
-app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/hotels', hotelsRoute);
 app.use('/api/rooms', roomsRoute);
-
-app.use((err, req, res, next) => {
-  const errrorStatus = err.status || 500;
-  const errorMessage = err.message || 'Something went wrong';
-  return res.status(errrorStatus).json({
-    success: false,
-    status: errrorStatus,
-    message: errorMessage,
-    stack: err.stack,
-  });
-});
 
 // ___________________________________
 app.listen(port, (req, res) => {
