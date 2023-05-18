@@ -7,6 +7,7 @@ import roomsRoute from './routes/rooms.js';
 import usersRoute from './routes/users.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import connectDB from './mongodb/connnection.js';
 const app = express();
 const port = process.env.PORT || 1010;
 dotenv.config();
@@ -17,9 +18,9 @@ app.get('/', (req, res) => {
 
 // Connecting mongodb through mongoose_____________________
 
-const connect = async () => {
+const startServer = async () => {
   try {
-    await mongoose.connect(process.env.MONGO);
+    connectDB(process.env.MONGO);
   } catch (error) {
     throw error;
   }
@@ -53,6 +54,6 @@ app.use((err, req, res, next) => {
 
 // ___________________________________
 app.listen(port, (req, res) => {
-  connect();
+  startServer();
   console.log('listening to the port ', port);
 });
