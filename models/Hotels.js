@@ -33,6 +33,7 @@ const HotelSchema = new mongoose.Schema({
     type: Number,
     min: 0,
     max: 5,
+    required: true,
   },
   photos: {
     type: [String],
@@ -48,6 +49,13 @@ const HotelSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+HotelSchema.pre('save', function (next) {
+  if (this.city) {
+    this.city = this.city.toLowerCase();
+  }
+  next();
 });
 
 export default mongoose.model('Hotels', HotelSchema);

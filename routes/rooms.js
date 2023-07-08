@@ -1,7 +1,6 @@
 import express from 'express';
 import Rooms from '../models/Rooms.js';
 import Hotels from '../models/Hotels.js';
-import { verifyAdmin } from '../utils/verifyToken.js';
 const router = express.Router();
 
 // Create_______________________
@@ -26,7 +25,7 @@ router.post('/:hotelid', async (req, res, next) => {
 
 // Update________________
 
-router.put('/:id', verifyAdmin, async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const updatedroom = await Rooms.findByIdAndUpdate(
       req.params.id,
@@ -41,7 +40,7 @@ router.put('/:id', verifyAdmin, async (req, res, next) => {
 
 // Delete________________
 
-router.delete('/:id/:hotelid', verifyAdmin, async (req, res, next) => {
+router.delete('/:id/:hotelid', async (req, res, next) => {
   const hotelId = req.params.hotelid;
   try {
     await Rooms.findByIdAndDelete(req.params.id);

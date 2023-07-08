@@ -1,10 +1,9 @@
 import express from 'express';
 import Hotels from '../models/Hotels.js';
 import Rooms from '../models/Rooms.js';
-import { verifyAdmin } from '../utils/verifyToken.js';
 const router = express.Router();
 
-router.post('/', verifyAdmin, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const newHotel = new Hotels(req.body);
   try {
     const savedHotel = await newHotel.save();
@@ -14,9 +13,20 @@ router.post('/', verifyAdmin, async (req, res, next) => {
   }
 });
 
+// Find all the data ___________________________
+
+router.get('/all', async (req, res, next) => {
+  try {
+    const hotel = await Hotels.find();
+    res.status(200).json(hotel);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Update________________
 
-router.put('/:id', verifyAdmin, async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const updatedHotel = await Hotels.findByIdAndUpdate(
       req.params.id,
@@ -31,7 +41,7 @@ router.put('/:id', verifyAdmin, async (req, res, next) => {
 
 // Delete________________
 
-router.delete('/:id', verifyAdmin, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const deleteHotel = await Hotels.findByIdAndDelete(req.params.id);
     res.status(200).json('Hotel has been deleted');
@@ -59,7 +69,7 @@ router.get('/', async (req, res, next) => {
     const hotels = await Hotels.find({
       ...others,
       cheapestPrice: { $gte: min | 1, $lte: max || 999 },
-    }).limit(4);
+    }).limit(8);
     res.status(200).json(hotels);
   } catch (err) {
     next(err);
